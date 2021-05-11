@@ -98,6 +98,18 @@ public class AddressBookMain {
         }
     }
 
+    private long getCountByCityState(String cityOrState, int searchChoice) {
+        long count = 0;
+        for (Map.Entry<String, List<Contact>> entry : addressBookMap.entrySet()) {
+            List<Contact> list = entry.getValue();
+            if (searchChoice == 1)
+                count += list.stream().filter(obj -> obj.getCity().equals(cityOrState)).count();
+            else if (searchChoice == 2)
+                count += list.stream().filter(obj -> obj.getState().equals(cityOrState)).count();
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
         AddressBookMain.menu();
     }
@@ -124,7 +136,7 @@ public class AddressBookMain {
             }
 
             System.out.println(
-                    "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Exit");
+                    "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Get count of contact persons by city or state \n 9)Exit");
             choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1: {
@@ -199,7 +211,16 @@ public class AddressBookMain {
                     addressObj.viewPersonsByCityState(cityOrState, searchChoice);
                     break;
                 }
-                case 8:
+                case 8: {
+                    System.out.println("Enter the name of city or state");
+                    String cityOrState = sc.nextLine();
+                    System.out.println("Enter 1 if you entered name of a city \nEnter 2 if you entered name of a state");
+                    int searchChoice = Integer.parseInt(sc.nextLine());
+                    System.out.println("Total persons in " + cityOrState + " = "
+                            + addressObj.getCountByCityState(cityOrState, searchChoice));
+                    break;
+                }
+                case 9:
                     System.exit(0);
                     break;
             }

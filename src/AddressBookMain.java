@@ -89,7 +89,7 @@ public class AddressBookMain {
 
         while (choice != 6) {
             if (addressObj.addressBookMap.isEmpty()) {
-                System.out.println("Welcome to the AddressBook Program");
+                System.out.println("Welcome to the AddressBook Program-");
                 System.out.println("Enter the name of address book to add:");
                 String listName = sc.nextLine();
                 addressObj.addAddressBook(listName);

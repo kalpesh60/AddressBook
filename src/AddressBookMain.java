@@ -9,6 +9,8 @@ public class AddressBookMain {
     Scanner sc = new Scanner(System.in);
     private static List<Contact> addressList = new ArrayList<Contact>();
     HashMap<String, List<Contact>> addressBookMap = new HashMap<String, List<Contact>>();
+    HashMap<Contact, String> personCityMap = new HashMap<Contact, String>();
+    HashMap<Contact, String> personStateMap = new HashMap<Contact, String>();
 
     public void addContact(Contact contact) {
         addressList.add(contact);
@@ -78,6 +80,24 @@ public class AddressBookMain {
         }
     }
 
+    private void addToDictionary(boolean contactIsAdded, Contact contactObj) {
+        if (contactIsAdded == true) {
+            personCityMap.put(contactObj, contactObj.getCity());
+            personStateMap.put(contactObj, contactObj.getState());
+        }
+    }
+
+
+    private void viewPersonsByCityState(String cityOrState, int searchChoice) {
+        for (Map.Entry<String, List<Contact>> entry : addressBookMap.entrySet()) {
+            List<Contact> list = entry.getValue();
+            if (searchChoice == 1)
+                list.stream().filter(obj -> obj.getCity().equals(cityOrState)).forEach(System.out::println);
+            else if (searchChoice == 2)
+                list.stream().filter(obj -> obj.getState().equals(cityOrState)).forEach(System.out::println);
+        }
+    }
+
     public static void main(String[] args) {
         AddressBookMain.menu();
     }
@@ -104,7 +124,7 @@ public class AddressBookMain {
             }
 
             System.out.println(
-                    "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7Exit");
+                    "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Exit");
             choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1: {
@@ -171,6 +191,17 @@ public class AddressBookMain {
                     int searchChoice = Integer.parseInt(sc.nextLine());
                     addressObj.searchPersonAcrossCityState(searchChoice, cityOrState);
                 }
+                case 7: {
+                    System.out.println("Enter the name of city or state");
+                    String cityOrState = sc.nextLine();
+                    System.out.println("Enter 1 if you entered name of a city \nEnter 2 if you entered name of a state");
+                    int searchChoice = Integer.parseInt(sc.nextLine());
+                    addressObj.viewPersonsByCityState(cityOrState, searchChoice);
+                    break;
+                }
+                case 8:
+                    System.exit(0);
+                    break;
             }
         }
     }

@@ -7,9 +7,10 @@ public class AddressBookMain {
     HashMap<Contact, String> personCityMap = new HashMap<Contact, String>();
     HashMap<Contact, String> personStateMap = new HashMap<Contact, String>();
 
-    public void addContact(Contact contact) {
+    public boolean addContact(Contact contact) {
         addressList.add(contact);
         System.out.println("Contact Added.\n" + contact);
+        return true;
     }
 
     public boolean editDetails(String firstName) {
@@ -138,7 +139,32 @@ public class AddressBookMain {
                     "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Get count of contact persons by city or state \n 9)Sort entries by name in current address book \n 10)Exit");
             choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
-                case 1:
+                case 1: {
+                    System.out.println("Add Person Details:");
+                    System.out.println("First Name:");
+                    String firstName = sc.nextLine();
+                    System.out.println("Last Name:");
+                    String lastName = sc.nextLine();
+                    if (checkForDuplicate(firstName))
+                        continue;
+                    System.out.println("Address:");
+                    String address = sc.nextLine();
+                    System.out.println("City:");
+                    String city = sc.nextLine();
+                    System.out.println("State:");
+                    String state = sc.nextLine();
+                    System.out.println("Zip:");
+                    String zip = sc.nextLine();
+                    System.out.println("Phone no:");
+                    String phoneNo = sc.nextLine();
+                    System.out.println("Email");
+                    String email = sc.nextLine();
+
+                    Contact contactObj = new Contact(firstName, lastName, address, city, state, zip, phoneNo, email);
+                    boolean contactIsAdded = addressObj.addContact(contactObj);
+                    addressObj.addToDictionary(contactIsAdded, contactObj);
+                    break;
+                }
                 case 2: {
                     System.out.println(
                             "Enter first name of person to edit details:");

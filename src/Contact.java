@@ -1,4 +1,6 @@
-public class Contact {
+import java.util.Comparator;
+
+public class Contact implements Comparator<Contact> {
 
     private String firstName;
     private String lastName;
@@ -20,6 +22,10 @@ public class Contact {
         this.zip = zip;
         this.phoneNo = phoneNo;
         this.email = email;
+    }
+
+    public Contact() {
+
     }
 
     public String getFirstName() {
@@ -78,5 +84,9 @@ public class Contact {
     public String toString() {
         return "Contact [firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", city="
                 + city + ", state=" + state + ", zip=" + zip + ", phoneNo=" + phoneNo + ", email=" + email + "]";
+    }
+
+    public int compare(Contact obj1, Contact obj2) {
+        return (obj1.getFirstName() + obj1.getLastName()).compareTo(obj2.getFirstName() + obj2.getLastName());
     }
 }

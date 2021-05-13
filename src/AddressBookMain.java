@@ -1,9 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class AddressBookMain {
     Scanner sc = new Scanner(System.in);
@@ -87,7 +82,6 @@ public class AddressBookMain {
         }
     }
 
-
     private void viewPersonsByCityState(String cityOrState, int searchChoice) {
         for (Map.Entry<String, List<Contact>> entry : addressBookMap.entrySet()) {
             List<Contact> list = entry.getValue();
@@ -110,6 +104,11 @@ public class AddressBookMain {
         return count;
     }
 
+    private List<Contact> sortAddressBookByName(List<Contact> sortList) {
+        Collections.sort(sortList, new Contact());
+        return sortList;
+    }
+
     public static void main(String[] args) {
         AddressBookMain.menu();
     }
@@ -119,7 +118,7 @@ public class AddressBookMain {
         AddressBookMain addressObj = new AddressBookMain();
         int choice = 0;
 
-        while (choice != 6) {
+        while (choice != 10) {
             if (addressObj.addressBookMap.isEmpty()) {
                 System.out.println("Welcome to the AddressBook Program-");
                 System.out.println("Enter the name of address book to add:");
@@ -136,34 +135,10 @@ public class AddressBookMain {
             }
 
             System.out.println(
-                    "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Get count of contact persons by city or state \n 9)Exit");
+                    "Enter a choice: \n 1)Add a new contact \n 2)Edit a contact \n 3)Delete Contact \n 4)Add Address Book \n 5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Get count of contact persons by city or state \n 9)Sort entries by name in current address book \n 10)Exit");
             choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
-                case 1: {
-                    System.out.println("Add Person Details:");
-                    System.out.println("First Name:");
-                    String firstName = sc.nextLine();
-                    if (checkForDuplicate(firstName))
-                        continue;
-                    System.out.println("Last Name:");
-                    String lastName = sc.nextLine();
-                    System.out.println("Address:");
-                    String address = sc.nextLine();
-                    System.out.println("City:");
-                    String city = sc.nextLine();
-                    System.out.println("State:");
-                    String state = sc.nextLine();
-                    System.out.println("Zip:");
-                    String zip = sc.nextLine();
-                    System.out.println("Phone no:");
-                    String phoneNo = sc.nextLine();
-                    System.out.println("Email");
-                    String email = sc.nextLine();
-
-                    Contact contactObj = new Contact(firstName, lastName, address, city, state, zip, phoneNo, email);
-                    addressObj.addContact(contactObj);
-                    break;
-                }
+                case 1:
                 case 2: {
                     System.out.println(
                             "Enter first name of person to edit details:");
@@ -220,7 +195,13 @@ public class AddressBookMain {
                             + addressObj.getCountByCityState(cityOrState, searchChoice));
                     break;
                 }
-                case 9:
+                case 9: {
+                    List<Contact> sortedEntriesList = addressObj.sortAddressBookByName(addressObj.addressList);
+                    System.out.println("Entries sorted in current address book. Sorted Address Book Entries:");
+                    System.out.println(sortedEntriesList);
+                    break;
+                }
+                case 10:
                     System.exit(0);
                     break;
             }

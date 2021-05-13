@@ -68,6 +68,10 @@ public class Contact implements Comparator<Contact> {
         this.state = state;
     }
 
+    public String getZip() {
+        return zip;
+    }
+
     public void setZip(String zip) {
         this.zip = zip;
     }

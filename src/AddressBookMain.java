@@ -163,7 +163,7 @@ public class AddressBookMain {
             personBuffer.append(personDataString);
         });
         try {
-            Files.write(Paths.get("AddressBook.txt"), personBuffer.toString().getBytes(StandardCharsets.UTF_8) );
+            Files.write(Paths.get("AddressBook.txt"), personBuffer.toString().getBytes() );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -176,8 +176,6 @@ public class AddressBookMain {
             e.printStackTrace();
         }
     }
-
-
 
     public static void main(String[] args) {
         AddressBookMain.menu();
@@ -207,7 +205,7 @@ public class AddressBookMain {
             System.out.println(
                     "Enter a choice: \n 1)Add new contact \n 2)Edit contact \n 3)Delete Contact \n 4)Add Address Book \n " +
                             "5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Get count of contact persons by city or state \n " +
-                            "9)Sort entries by name \n 10)Sort by City \n 11)Sort by State \n 12)Sort by Zip \n 13)Exit");
+                            "9)Sort entries by name \n 10)Sort by City \n 11)Sort by State \n 12)Sort by Zip \n 13)Write into file \n 14)Read into file \n 15)Exit");
             choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
                 case 1: {

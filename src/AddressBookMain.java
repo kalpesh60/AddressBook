@@ -1,7 +1,13 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class AddressBookMain {
+
     Scanner sc = new Scanner(System.in);
     private static List<Contact> addressList = new ArrayList<Contact>();
     HashMap<String, List<Contact>> addressBookMap = new HashMap<String, List<Contact>>();
@@ -17,8 +23,8 @@ public class AddressBookMain {
     public boolean editDetails(String firstName) {
         Contact edit;
         boolean contactFound = false;
-        for (int i = 0; i < addressList.size(); i++) {
-            edit = addressList.get(i);
+        for (Contact contact : addressList) {
+            edit = contact;
             if ((edit.getFirstName().equals(firstName))) {
                 System.out.println("Enter new Address:");
                 edit.setAddress(sc.nextLine());
@@ -43,7 +49,7 @@ public class AddressBookMain {
         Contact remove;
         boolean contactFound = false;
         for (int i = 0; i < addressList.size(); i++) {
-            remove = (Contact) addressList.get(i);
+            remove = addressList.get(i);
             if ((remove.getFirstName().equals(firstName))) {
                 addressList.remove(i);
                 contactFound = true;
@@ -78,7 +84,7 @@ public class AddressBookMain {
     }
 
     private void addToDictionary(boolean contactIsAdded, Contact contactObj) {
-        if (contactIsAdded == true) {
+        if (contactIsAdded) {
             personCityMap.put(contactObj, contactObj.getCity());
             personStateMap.put(contactObj, contactObj.getState());
         }
@@ -107,7 +113,7 @@ public class AddressBookMain {
     }
 
     private List<Contact> sortAddressBookByName(List<Contact> sortList) {
-        Collections.sort(sortList, new Contact());
+        sortList.sort(new Contact());
         return sortList;
     }
 
@@ -150,6 +156,29 @@ public class AddressBookMain {
         }
     }
 
+    public static void writeData(AddressBookMain addressObj) {
+        StringBuffer personBuffer = new StringBuffer();
+        addressList.forEach(person -> {
+            String personDataString = person.toString().concat("\n");
+            personBuffer.append(personDataString);
+        });
+        try {
+            Files.write(Paths.get("AddressBook.txt"), personBuffer.toString().getBytes(StandardCharsets.UTF_8) );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void readData(AddressBookMain addressObj) {
+        try{
+            Files.lines(new File("AddressBook.txt").toPath()).map(String::trim).forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     public static void main(String[] args) {
         AddressBookMain.menu();
     }
@@ -170,15 +199,14 @@ public class AddressBookMain {
             System.out.println("Enter the name of the address book you want to access");
             String listName = sc.nextLine();
             if (addressObj.addressBookMap.containsKey(listName)) {
-                addressObj.addressList = addressObj.addressBookMap.get(listName);
+                addressList = addressObj.addressBookMap.get(listName);
             } else {
                 System.out.println("Address list with name " + listName + " not present. Please add it first.");
             }
 
             System.out.println(
                     "Enter a choice: \n 1)Add new contact \n 2)Edit contact \n 3)Delete Contact \n 4)Add Address Book \n " +
-                            "5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n " +
-                            "7)View persons by city or state \n 8)Get count of contact persons by city or state \n " +
+                            "5)View Address Book Contacts \n 6)Search person in a city or state across the multiple Address Books \n 7)View persons by city or state \n 8)Get count of contact persons by city or state \n " +
                             "9)Sort entries by name \n 10)Sort by City \n 11)Sort by State \n 12)Sort by Zip \n 13)Exit");
             choice = Integer.parseInt(sc.nextLine());
             switch (choice) {
@@ -202,7 +230,6 @@ public class AddressBookMain {
                     String phoneNo = sc.nextLine();
                     System.out.println("Email");
                     String email = sc.nextLine();
-
                     Contact contactObj = new Contact(firstName, lastName, address, city, state, zip, phoneNo, email);
                     boolean contactIsAdded = addressObj.addContact(contactObj);
                     addressObj.addToDictionary(contactIsAdded, contactObj);
@@ -213,7 +240,7 @@ public class AddressBookMain {
                             "Enter first name of person to edit details:");
                     String firstName = sc.nextLine();
                     boolean contactFound = addressObj.editDetails(firstName);
-                    if (contactFound == true)
+                    if (contactFound)
                         System.out.println("Details successfully edit");
                     else
                         System.out.println("Contact not found");
@@ -224,7 +251,7 @@ public class AddressBookMain {
                             "Enter first name of person to delete data");
                     String firstName = sc.nextLine();
                     boolean contactFound = addressObj.removeDetails(firstName);
-                    if (contactFound == true)
+                    if (contactFound)
                         System.out.println("Details successfully deleted");
                     else
                         System.out.println("Contact not found");
@@ -237,7 +264,7 @@ public class AddressBookMain {
                     break;
                 }
                 case 5: {
-                    System.out.println(" " + addressObj.addressList);
+                    System.out.println(" " + addressList);
                     break;
                 }
                 case 6: {
@@ -265,7 +292,7 @@ public class AddressBookMain {
                     break;
                 }
                 case 9: {
-                    List<Contact> sortedEntriesList = addressObj.sortAddressBookByName(addressObj.addressList);
+                    List<Contact> sortedEntriesList = addressObj.sortAddressBookByName(addressList);
                     System.out.println("Entries sorted in current address book. Sorted Address Book Entries:");
                     System.out.println(sortedEntriesList);
                     break;
@@ -276,7 +303,11 @@ public class AddressBookMain {
                          break;
                 case 12: addressObj.sortByZip();
                          break;
-                case 13: System.exit(0);
+                case 13: AddressBookMain.writeData(addressObj);
+                         break;
+                case 14: AddressBookMain.readData(addressObj);
+                         break;
+                case 15: System.exit(0);
                          break;
             }
         }

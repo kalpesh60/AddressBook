@@ -25,7 +25,6 @@ public class Contact implements Comparator<Contact> {
     }
 
     public Contact() {
-
     }
 
     public String getFirstName() {
